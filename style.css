@@ -1,0 +1,38 @@
+body {
+    display: flex;
+    margin: 0;
+    background-color: #112D4E;
+}
+
+* {
+    border: 1px solid black;
+    gap: 5px
+}
+
+.side {
+    height: 100svh;
+    flex: 1;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    height: 90svh;
+    aspect-ratio: 1 / 1.4;
+}
+
+.display {
+    flex: 5;
+    background-color: #F9F7F7;
+}
+
+.buttons {
+    flex: 10;
+    background-color: #3F72AF;
+}
+
+.options {
+    flex: 1;
+    background-color: #DBE2EF;
+}
