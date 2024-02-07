@@ -11,7 +11,7 @@ function hoverOnButtons() {
                     e.style.cssText = "color: #EAE2B7; background-color: #003049; font-weight: bold;"
                     break
                 case e.classList.contains('operation'):
-                    e.classList.contains('equal') ? 
+                    e.id === 'equal' ? 
                     e.style.cssText = "color: #F77F00; background-color: #003049; font-weight: bold;" :
                     e.style.cssText = "color: #EAE2B7; background-color: #F77F00; font-weight: bold;"
                     break
