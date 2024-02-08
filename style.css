@@ -85,6 +85,6 @@ body {
 }
 
 #equal {
-    flex: 2 1 auto;
+    flex: 1;
     background-color: #F77F00;
 }

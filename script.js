@@ -5,6 +5,9 @@ const displayCurrent = document.querySelector('.current')
 const displayHistory = document.querySelector('.history')
 
 function hoverOnButtons() {
+    /*
+    Handles the CSS modifications on hover for each button type
+    */
     const buttons = document.querySelectorAll('button')
     buttons.forEach((e) => {
         e.addEventListener('mouseover', () => {
@@ -34,21 +37,32 @@ function makeCalculations(a, b, action) {
             return a * b
         case "/":
             return a / b
-        case "=":
-            return a
+        case "%":
+            return (a / 100) * b
     }
 }
 
 function main() {
+    // Handles the functionality of the number buttons + decimal and sign change buttons
     const numberButtons = document.querySelectorAll('.number, .decimal')
     numberButtons.forEach((e) => {
         e.addEventListener('click', () => {
-            // handle operands
-            if (e.textContent === '.' && displayArray.includes('.')) {
+            // Make sure decimal can be put only once per operand
+            // Make sure sign change does nothing if no input yet
+            if ((e.textContent === '.' && displayArray.includes('.')) ||
+                (e.textContent === "+/-" && displayArray.join("") === "")
+            ) {
             } else {
-                displayArray.push(e.textContent)
+                if (e.textContent !== "+/-") {
+                    displayArray.push(e.textContent)
+                }
                 displayNumber = parseFloat(displayArray.join(''))
+                if (e.textContent === "+/-") {
+                    displayNumber = displayNumber * -1
+                    displayArray = displayNumber.toString().split("")
+                }
                 displayCurrent.textContent = displayNumber
+                // Make sure operand fits the display if too big
                 if (displayArray.length > 15) {
                     displayCurrent.style.fontSize = '4.7svh'
                 }
@@ -56,29 +70,56 @@ function main() {
         })
     })
 
-    const operationButtons = document.querySelectorAll('.operation')
+    // Handles the functionality of the operation buttons + percentage and equal buttons
+    const operationButtons = document.querySelectorAll(
+        '.operation, #percent')
     operationButtons.forEach((e) => {
         e.addEventListener('click', () => {
-            console.log(historyArray.join(" "))
-            if (displayCurrent.textContent !== "") {
-                historyArray.push(parseFloat(displayCurrent.textContent))
-            } else {
-                historyArray.push("")
-            }
-            console.log(historyArray.join(" "))
-            if (historyArray.length === 3) {
-                let result = makeCalculations(historyArray[0], historyArray[2], historyArray[1])
-                historyArray = [result]
-            }
-            historyArray.push(e.textContent)
-            if (e.textContent === "=") {
-                displayHistory.textContent = ''
-                displayCurrent.textContent = historyArray[0]
-            } else {
+            if (e.textContent !== "=") {
+                // Until = is clicked obtain the operand from the display
+                // Make sure to not add anything to the execution history if display is empty
+                let entry = parseFloat(displayCurrent.textContent)
+                if (!isNaN(entry)) {
+                    historyArray.push(entry)
+                }
+                // If execution history has 2 operands and operator, perform calculations
+                if (historyArray.length === 3) {
+                    let result = makeCalculations(historyArray[0], historyArray[2], historyArray[1])
+                    // Clean up the history and add only the calculation result
+                    historyArray.splice(0, 3)
+                    historyArray.push(result)
+                }
+                // If last entry was also operator just replace the operator
+                if (typeof historyArray[historyArray.length - 1] === "number") {
+                    console.log(historyArray[historyArray.length - 1])
+                    historyArray.push(e.textContent)
+                } else {
+                    historyArray.splice(historyArray.length - 1, 1, e.textContent)
+                }
+
+                // Make sure to visualize what was calculated on the history display
                 displayHistory.textContent = historyArray.join(" ")
-                displayCurrent.textContent = ''
+                // Make sure to empty the display and its array
+                // to be ready for inputting new operands
+                displayCurrent.textContent = ""
+                displayArray = []
+            } else {
+                // If = is clicked also calculate but:
+                // - cleanup the history display and its array
+                // - handle the size of the result to fit the display
+                // - prepare the result as operand for future operations
+                let result = makeCalculations(
+                    historyArray[0],
+                    parseFloat(displayCurrent.textContent),
+                    historyArray[1])
+                displayHistory.textContent = ""
+                displayCurrent.textContent = result
+                if (result.toString().length > 15) {
+                    displayCurrent.style.fontSize = '4.7svh'
+                }
+                historyArray = []
+                displayArray = result.toString().split("")
             }
-            displayArray = []
         })
     })
 }
