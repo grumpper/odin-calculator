@@ -63,9 +63,9 @@ function main() {
                 }
                 displayCurrent.textContent = displayNumber
                 // Make sure operand fits the display if too big
-                if (displayArray.length > 15) {
-                    displayCurrent.style.fontSize = '4.7svh'
-                }
+                displayArray.length > 15 ?
+                    displayCurrent.style.fontSize = '4.7svh' :
+                    displayCurrent.style.fontSize = '7svh'
             }
         })
     })
@@ -91,7 +91,6 @@ function main() {
                 }
                 // If last entry was also operator just replace the operator
                 if (typeof historyArray[historyArray.length - 1] === "number") {
-                    console.log(historyArray[historyArray.length - 1])
                     historyArray.push(e.textContent)
                 } else {
                     historyArray.splice(historyArray.length - 1, 1, e.textContent)
@@ -114,13 +113,36 @@ function main() {
                     historyArray[1])
                 displayHistory.textContent = ""
                 displayCurrent.textContent = result
-                if (result.toString().length > 15) {
-                    displayCurrent.style.fontSize = '4.7svh'
-                }
+                result.toString().length > 15 ?
+                    displayCurrent.style.fontSize = '4.7svh' :
+                    displayCurrent.style.fontSize = '7svh'
                 historyArray = []
                 displayArray = result.toString().split("")
             }
         })
+    })
+
+    // handles corrections to the input operand
+    const deleteButton = document.querySelector('#delete')
+    deleteButton.addEventListener('click', () => {
+        displayArray = displayCurrent.textContent.toString().split("")
+        if (displayArray.length > 0) {
+            displayArray.pop()
+        }
+        displayNumber = parseFloat(displayArray.join(""))
+        !isNaN(displayNumber) ?
+            displayCurrent.textContent = displayNumber :
+            displayCurrent.textContent = ""
+    })
+
+    // handles the cancel button
+    const cancelButton = document.querySelector('#cancel')
+    cancelButton.addEventListener('click', () => {
+        displayArray = []
+        historyArray = []
+        displayNumber = undefined
+        displayCurrent.textContent = ""
+        displayHistory.textContent = ""
     })
 }
 
