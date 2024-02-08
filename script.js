@@ -1,5 +1,6 @@
 let historyArray = []
 let displayArray = []
+let equalUsed = false
 let displayNumber = undefined
 const displayCurrent = document.querySelector('.current')
 const displayHistory = document.querySelector('.history')
@@ -121,6 +122,10 @@ function operateCalculate() {
             ) {
             } else {
                 if (e.textContent !== "+/-") {
+                    if (equalUsed) {
+                        displayArray = []
+                        equalUsed = false
+                    }
                     displayArray.push(e.textContent)
                 }
                 displayNumber = parseFloat(displayArray.join(''))
@@ -143,6 +148,7 @@ function operateCalculate() {
     operationButtons.forEach((e) => {
         e.addEventListener('click', () => {
             if (e.textContent !== "=") {
+                equalUsed = false
                 let divideByZero = false
                 // Until = is clicked obtain the operand from the display
                 // Make sure to not add anything to the execution history if display is empty
@@ -222,7 +228,8 @@ function operateCalculate() {
                         displayCurrent.style.fontSize = '4.7svh' :
                         displayCurrent.style.fontSize = '7svh'
                     historyArray = []
-                    displayArray = []
+                    displayArray = result.toString().split("")
+                    equalUsed = true
                 }
             }
         })
