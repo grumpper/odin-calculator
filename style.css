@@ -49,7 +49,6 @@ body {
 .current {
     display: flex;
     align-items: center;
-    text-align: center;
     justify-content: flex-end;
     flex: 4;
     font-size: 7svh;
