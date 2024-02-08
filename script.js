@@ -42,7 +42,7 @@ function makeCalculations(a, b, action) {
     }
 }
 
-function main() {
+function operateCalculate() {
     // Handles the functionality of the number buttons + decimal and sign change buttons
     const numberButtons = document.querySelectorAll('.number, .decimal')
     numberButtons.forEach((e) => {
@@ -77,6 +77,7 @@ function main() {
     operationButtons.forEach((e) => {
         e.addEventListener('click', () => {
             if (e.textContent !== "=") {
+                let divideByZero = false
                 // Until = is clicked obtain the operand from the display
                 // Make sure to not add anything to the execution history if display is empty
                 let entry = parseFloat(displayCurrent.textContent)
@@ -86,12 +87,24 @@ function main() {
                 }
                 // If execution history has 2 operands and operator, perform calculations
                 if (historyArray.length === 3) {
-                    let result = makeCalculations(historyArray[0], historyArray[2], historyArray[1])
+                    let result = makeCalculations(
+                        historyArray[0], historyArray[2], historyArray[1]
+                    )
+                    if (historyArray[2] === 0) {
+                        displayHistory.textContent = "Don't break the universe !!!"
+                        console.log('Calculation result: ERROR')
+                        console.log('-----------------------------')
+                        result = ""
+                        divideByZero = true
+                    }
                     // Clean up the history and add only the calculation result
                     historyArray.splice(0, 3)
-                    historyArray.push(result)
-                    console.log(`Calculation result: ${result}`)
-                    console.log('-----------------------------')
+                    if (result !== "") {
+                        historyArray.push(result)
+                        console.log(`Calculation result: ${result}`)
+                        console.log('-----------------------------')
+                        console.log(`Operand added: ${result}`)
+                    }
                 }
                 // If last entry was also operator just replace the operator
                 // But make sure history does not start with operator
@@ -106,7 +119,9 @@ function main() {
                 }
 
                 // Make sure to visualize what was calculated on the history display
-                displayHistory.textContent = historyArray.join(" ")
+                if (!divideByZero) {
+                    displayHistory.textContent = historyArray.join(" ")
+                }
                 // Make sure to empty the display and its array
                 // to be ready for inputting new operands
                 displayCurrent.textContent = ""
@@ -127,16 +142,22 @@ function main() {
                         historyArray[0],
                         parseFloat(displayCurrent.textContent),
                         historyArray[1])
-                    displayHistory.textContent = ""
+                    if (parseFloat(displayCurrent.textContent) === 0) {
+                        displayHistory.textContent = "Don't break the universe !!!"
+                        console.log('Calculation result: ERROR')
+                        result = ""
+                    } else {
+                        displayHistory.textContent = ""
+                        console.log(`Calculation result: ${result}`)
+                    }
                     displayCurrent.textContent = result
-                    console.log(`Calculation result: ${result}`)
                     console.log('-----------------------------')
                     result.toString().length > 15 ?
                         displayCurrent.style.fontSize = '4.7svh' :
                         displayCurrent.style.fontSize = '7svh'
                     historyArray = []
                     displayArray = result.toString().split("")
-                }    
+                }
             }
         })
     })
@@ -162,8 +183,11 @@ function main() {
         displayNumber = undefined
         displayCurrent.textContent = ""
         displayHistory.textContent = ""
+        console.log('-----------------------------')
+        console.log(`Clearing everything...`)
+        console.log('-----------------------------')
     })
 }
 
 hoverOnButtons()
-main()
+operateCalculate()
