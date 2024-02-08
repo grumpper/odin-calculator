@@ -38,7 +38,7 @@ function makeCalculations(a, b, action) {
         case "/":
             return a / b
         case "%":
-            return (a / 100) * b
+            return Math.abs((a / 100) * b)
     }
 }
 
@@ -47,9 +47,10 @@ function main() {
     const numberButtons = document.querySelectorAll('.number, .decimal')
     numberButtons.forEach((e) => {
         e.addEventListener('click', () => {
-            // Make sure decimal can be put only once per operand
+            // Make sure decimal can be put only once per operand and after a number
             // Make sure sign change does nothing if no input yet
             if ((e.textContent === '.' && displayArray.includes('.')) ||
+                (e.textContent === '.' && displayArray.join("") === "") ||
                 (e.textContent === "+/-" && displayArray.join("") === "")
             ) {
             } else {
@@ -79,8 +80,9 @@ function main() {
                 // Until = is clicked obtain the operand from the display
                 // Make sure to not add anything to the execution history if display is empty
                 let entry = parseFloat(displayCurrent.textContent)
-                if (!isNaN(entry)) {
+                if (!isNaN(entry) && (typeof historyArray[historyArray.length - 1] !== "number")) {
                     historyArray.push(entry)
+                    console.log(`Operand added: ${entry}`)
                 }
                 // If execution history has 2 operands and operator, perform calculations
                 if (historyArray.length === 3) {
@@ -88,12 +90,19 @@ function main() {
                     // Clean up the history and add only the calculation result
                     historyArray.splice(0, 3)
                     historyArray.push(result)
+                    console.log(`Calculation result: ${result}`)
+                    console.log('-----------------------------')
                 }
                 // If last entry was also operator just replace the operator
+                // But make sure history does not start with operator
                 if (typeof historyArray[historyArray.length - 1] === "number") {
                     historyArray.push(e.textContent)
+                    console.log(`Operator added: ${e.textContent}`)
                 } else {
-                    historyArray.splice(historyArray.length - 1, 1, e.textContent)
+                    if (typeof historyArray[0] === "number") {
+                        historyArray.splice(historyArray.length - 1, 1, e.textContent)
+                        console.log(`Operator replaced with: ${e.textContent}`)
+                    }
                 }
 
                 // Make sure to visualize what was calculated on the history display
@@ -103,21 +112,31 @@ function main() {
                 displayCurrent.textContent = ""
                 displayArray = []
             } else {
-                // If = is clicked also calculate but:
+                // If = is clicked, and we have two operands and operator
+                // also calculate but:
                 // - cleanup the history display and its array
                 // - handle the size of the result to fit the display
                 // - prepare the result as operand for future operations
-                let result = makeCalculations(
-                    historyArray[0],
-                    parseFloat(displayCurrent.textContent),
-                    historyArray[1])
-                displayHistory.textContent = ""
-                displayCurrent.textContent = result
-                result.toString().length > 15 ?
-                    displayCurrent.style.fontSize = '4.7svh' :
-                    displayCurrent.style.fontSize = '7svh'
-                historyArray = []
-                displayArray = result.toString().split("")
+                let entry = parseFloat(displayCurrent.textContent)
+                if (!isNaN(entry) && (typeof historyArray[historyArray.length - 1] !== "number")) {
+                    historyArray.push(entry)
+                    console.log(`Operand added: ${entry}`)
+                }
+                if (historyArray.length === 3) {
+                    let result = makeCalculations(
+                        historyArray[0],
+                        parseFloat(displayCurrent.textContent),
+                        historyArray[1])
+                    displayHistory.textContent = ""
+                    displayCurrent.textContent = result
+                    console.log(`Calculation result: ${result}`)
+                    console.log('-----------------------------')
+                    result.toString().length > 15 ?
+                        displayCurrent.style.fontSize = '4.7svh' :
+                        displayCurrent.style.fontSize = '7svh'
+                    historyArray = []
+                    displayArray = result.toString().split("")
+                }    
             }
         })
     })
