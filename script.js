@@ -4,6 +4,72 @@ let displayNumber = undefined
 const displayCurrent = document.querySelector('.current')
 const displayHistory = document.querySelector('.history')
 
+function captureKeyboard() {
+    const event = new Event("click");
+    window.addEventListener("keydown", (e) => {
+        switch (e.code) {
+            case "Digit1":
+                document.querySelector('#one').dispatchEvent(event)
+                break
+            case "Digit2":
+                document.querySelector('#two').dispatchEvent(event)
+                break
+            case "Digit3":
+                document.querySelector('#three').dispatchEvent(event)
+                break
+            case "Digit4":
+                document.querySelector('#four').dispatchEvent(event)
+                break
+            case "Digit5":
+                e.shiftKey ?
+                    document.querySelector('#percent').dispatchEvent(event) :
+                    document.querySelector('#five').dispatchEvent(event)
+                break
+            case "Digit6":
+                document.querySelector('#six').dispatchEvent(event)
+                break
+            case "Digit7":
+                document.querySelector('#seven').dispatchEvent(event)
+                break
+            case "Digit8":
+                e.shiftKey ?
+                    document.querySelector('#multiply').dispatchEvent(event) :
+                    document.querySelector('#eight').dispatchEvent(event)
+                break
+            case "Digit9":
+                document.querySelector('#nine').dispatchEvent(event)
+                break
+            case "Digit0":
+                document.querySelector('#zero').dispatchEvent(event)
+                break
+            case "Backspace":
+                e.shiftKey || e.metaKey ?
+                    document.querySelector('#cancel').dispatchEvent(event) :
+                    document.querySelector('#delete').dispatchEvent(event)
+                break
+            case "Slash":
+                document.querySelector('#divide').dispatchEvent(event)
+                break
+            case "Minus":
+                e.shiftKey ?
+                    document.querySelector('#sign').dispatchEvent(event) :
+                    document.querySelector('#substract').dispatchEvent(event)
+                break
+            case "Equal":
+                e.shiftKey ?
+                    document.querySelector('#add').dispatchEvent(event) :
+                    document.querySelector('#equal').dispatchEvent(event)
+                break
+            case "Enter":
+                document.querySelector('#equal').dispatchEvent(event)
+                break
+            case "Period":
+                document.querySelector('#decimal').dispatchEvent(event)
+                break
+        }
+    });
+}
+
 function hoverOnButtons() {
     /*
     Handles the CSS modifications on hover for each button type
@@ -156,7 +222,7 @@ function operateCalculate() {
                         displayCurrent.style.fontSize = '4.7svh' :
                         displayCurrent.style.fontSize = '7svh'
                     historyArray = []
-                    displayArray = result.toString().split("")
+                    displayArray = []
                 }
             }
         })
@@ -190,4 +256,5 @@ function operateCalculate() {
 }
 
 hoverOnButtons()
+captureKeyboard()
 operateCalculate()
