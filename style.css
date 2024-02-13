@@ -18,7 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     align-self: center;
-    height: 90svh;
+    height: 95vmin;
     aspect-ratio: 1 / 1.4;
     background-color: #EAE2B7;
     border-radius: 5px;
