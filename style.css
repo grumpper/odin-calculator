@@ -40,8 +40,8 @@ body {
     align-items: center;
     justify-content: flex-end;
     flex: 2;
-    font-size: 4svh;
-    padding: 3svh;
+    font-size: 4vmin;
+    padding: 3vmin;
     opacity: 50%;
 
 }
@@ -51,8 +51,8 @@ body {
     align-items: center;
     justify-content: flex-end;
     flex: 4;
-    font-size: 7svh;
-    padding: 3svh;
+    font-size: 7vmin;
+    padding: 3vmin;
 }
 
 .buttons {
@@ -70,7 +70,7 @@ body {
 .function, .number, .operation {
     color: #003049;
     flex: 1;
-    font-size: 4svh;
+    font-size: 4vmin;
     background: none;
     border: none;
 

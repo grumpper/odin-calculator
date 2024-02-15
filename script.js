@@ -136,8 +136,8 @@ function operateCalculate() {
                 displayCurrent.textContent = displayNumber
                 // Make sure operand fits the display if too big
                 displayArray.length > 15 ?
-                    displayCurrent.style.fontSize = '4.7svh' :
-                    displayCurrent.style.fontSize = '7svh'
+                    displayCurrent.style.fontSize = '4.7vmin' :
+                    displayCurrent.style.fontSize = '7vmin'
             }
         })
     })
@@ -225,8 +225,8 @@ function operateCalculate() {
                     displayCurrent.textContent = result
                     console.log('-----------------------------')
                     result.toString().length > 15 ?
-                        displayCurrent.style.fontSize = '4.7svh' :
-                        displayCurrent.style.fontSize = '7svh'
+                        displayCurrent.style.fontSize = '4.7vmin' :
+                        displayCurrent.style.fontSize = '7vmin'
                     historyArray = []
                     displayArray = result.toString().split("")
                     equalUsed = true
